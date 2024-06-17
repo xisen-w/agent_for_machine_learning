@@ -1,15 +1,11 @@
-# Agent for Prediction: Text-to-Model (T2M)
+# Agent for Machine Learning: Text-to-Model (T2M)
 
-## Overview
+## What is A4ML? 
 Unleash the power of AI without the complexity! Introducing the Agent for Prediction: Text-to-Model (T2M), a revolutionary tool that transforms plain text into precise predictive models. Designed for simplicity and efficiency, T2M enables anyone, regardless of their technical expertise, to leverage cutting-edge AI to fulfill their data prediction needs. As the AI market burgeons, poised to reach USD 4,691.89 billion by 2033, T2M stands at the forefront, democratizing technology and making robust, accurate predictions accessible to all. Join us in shaping the future—where your words model reality.
 
 Building AI-backed prediction models from scratch is challenging, especially for users without a technical background. To empower these users, we introduce a transformative approach called Text-to-Model (T2M). This paradigm simplifies the model creation process, enabling users to describe their needs and provide data in textual form, which our system then transforms into a high-performance predictive model.
 
-Certainly! Here's an enhanced analysis of the context in which your "Agent for Prediction: Text-to-Model (T2M)" is positioned, weaving in the statistics you provided for a compelling narrative:
-
----
-
-## Market Context
+## AI is big, but people are far from it
 
 Despite the global artificial intelligence market burgeoning from an estimated USD 196.65 billion in 2023 to a projected USD 4,691.89 billion by 2033, growing at a CAGR of 37.33%, AI technology remains elusive for the average person and underutilized in many business sectors. Studies highlight significant gaps: a striking 90% of all machine learning models developed by businesses never reach production, as reported by Toward Data Science. Furthermore, a Censuswide survey for Qlik revealed that only 24% of over 7,300 business decision-makers self-reported as data literate. 
 
