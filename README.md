@@ -1,9 +1,11 @@
 # Agent for Machine Learning: Text-to-Model (T2M)
 
 ## What is A4ML? 
-Unleash the power of AI without the complexity! Introducing the Agent for Prediction: Text-to-Model (T2M), a revolutionary tool that transforms plain text into precise predictive models. Designed for simplicity and efficiency, T2M enables anyone, regardless of their technical expertise, to leverage cutting-edge AI to fulfill their data prediction needs. As the AI market burgeons, poised to reach USD 4,691.89 billion by 2033, T2M stands at the forefront, democratizing technology and making robust, accurate predictions accessible to all. Join us in shaping the future—where your words model reality.
+Unleash the power of AI without the complexity! Introducing the Agent for Prediction: Text-to-Model (T2M), a revolutionary tool that transforms plain text into precise predictive models. Designed for exceptional accessibility and efficiency, T2M enables anyone—regardless of their technical expertise—to leverage cutting-edge AI to meet their data prediction needs.
 
-Building AI-backed prediction models from scratch is challenging, especially for users without a technical background. To empower these users, we introduce a transformative approach called Text-to-Model (T2M). This paradigm simplifies the model creation process, enabling users to describe their needs and provide data in textual form, which our system then transforms into a high-performance predictive model.
+In a world where the artificial intelligence market is set to soar to USD 4,691.89 billion by 2033, the need for inclusive technology is more pressing than ever. Yet, with 46% of EU citizens lacking basic digital skills, and 84% of Americans illiterate about AI, the gap between advanced technology and the general public remains vast. T2M is engineered to bridge this gap, democratizing sophisticated technology and making robust, accurate predictions accessible to all. Join us in shaping the future—where your words directly model reality.
+
+The challenge of building AI-backed predictive models from scratch is particularly daunting for those without a technical background. T2M simplifies the entire model creation process: users articulate their needs and provide data in textual form, which our system then transforms into high-performance predictive models. This approach not only democratizes AI, making it a practical tool across various industries, but also significantly reduces the barriers to entry for engaging with powerful technologies, enabling broader adoption and deeper understandin
 
 ## AI is big, but people are far from it
 
