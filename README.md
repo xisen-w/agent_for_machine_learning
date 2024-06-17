@@ -25,6 +25,8 @@ In response to these challenges, the Agent for Prediction: Text-to-Model (T2M) i
 - **Comprehensive Reporting**: Detailed performance metrics, data insights, and usage guidelines are provided in a user-friendly report.
 - **Scalability and Customization**: Adaptable to various user demands and data sizes, ensuring broad applicability.
 
+<img width="960" alt="Screenshot 2024-06-17 at 5 19 00 PM" src="https://github.com/Xisen-Wang/agent_for_prediction/assets/118058822/f892c9eb-e57a-44f5-9cc7-43797d17c99f">
+
 ## Benefits
 - **Accessibility**: Demystifies predictive modeling for non-technical users.
 - **Efficiency**: Significantly cuts down the time and expertise required to develop robust prediction models.
