@@ -1,8 +1,6 @@
-# agent_for_prediction
-Unleash the power of AI without the complexity! Introducing the Agent for Prediction: Text-to-Model (T2M). Simply describe your needs in text, and our AI transforms it into good-performing machine learning models. Unlock powerful, user-friendly AI as the market surges to USD 4.7 trillion by 2033.
+Unleash the power of AI without the complexity! Introducing the Agent for Prediction: Text-to-Model (T2M), a revolutionary tool that transforms plain text into precise predictive models. Designed for simplicity and efficiency, T2M enables anyone, regardless of their technical expertise, to leverage cutting-edge AI to fulfill their data prediction needs. As the AI market burgeons, poised to reach USD 4,691.89 billion by 2033, T2M stands at the forefront, democratizing technology and making robust, accurate predictions accessible to all. Join us in shaping the future—where your words model reality.
 
-
-Agent for Prediction: Text-to-Model (T2M)
+# Agent for Prediction: Text-to-Model (T2M)
 Overview
 Building AI-backed prediction models from scratch is challenging, especially for users without a technical background. To empower these users, we introduce a transformative approach called Text-to-Model (T2M). This paradigm simplifies the model creation process, enabling users to describe their needs and provide data in textual form, which our system then transforms into a high-performance predictive model.
 
