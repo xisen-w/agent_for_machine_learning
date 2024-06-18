@@ -1,7 +1,7 @@
 # Agent for Machine Learning: Text-to-Model (T2M)
 
 ## What is A4ML? 
-Unleash the power of AI without the complexity! Introducing the Agent for Prediction: Text-to-Model (T2M), a revolutionary tool that transforms plain text into precise predictive models. Designed for exceptional accessibility and efficiency, T2M enables anyone—regardless of their technical expertise—to leverage cutting-edge AI to meet their data prediction needs.
+Unleash the power of AI without the complexity! Introducing the Agent for Machine Learning: Text-to-Model (T2M), a revolutionary tool that transforms plain text into precise predictive models. Designed for exceptional accessibility and efficiency, T2M enables anyone—regardless of their technical expertise—to leverage cutting-edge AI to meet their data prediction needs.
 
 In a world where the artificial intelligence market is set to soar to USD 4,691.89 billion by 2033, the need for inclusive technology is more pressing than ever. Yet, with 46% of EU citizens lacking basic digital skills, and 84% of Americans illiterate about AI, the gap between advanced technology and the general public remains vast. T2M is engineered to bridge this gap, democratizing sophisticated technology and making robust, accurate predictions accessible to all. Join us in shaping the future—where your words directly model reality.
 
@@ -41,16 +41,12 @@ To get started with the Agent for Prediction, please follow the instructions bel
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/agent-for-prediction.git
 
 # Navigate to the project directory
-cd agent-for-prediction
 
-# Install dependencies
-pip install -r requirements.txt
+# Put API Keys & Change Name of Directories
 
-# Run the application
-python app.py
+# Run the notebook
 ```
 
 ## Documentation
