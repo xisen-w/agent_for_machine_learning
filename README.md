@@ -46,7 +46,7 @@ To get started with the Agent for Prediction, please follow the instructions bel
 
 # Put API Keys & Change Name of Directories
 
-# Run the notebook
+# Run the notebook. Run each blocks before running the integrated pipeline in the end.
 ```
 
 ## Documentation
