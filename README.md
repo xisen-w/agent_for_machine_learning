@@ -49,11 +49,8 @@ To get started with the Agent for Prediction, please follow the instructions bel
 # Run the notebook. Run each blocks before running the integrated pipeline in the end.
 ```
 
-## Documentation
-For more detailed information about how to use the Agent for Prediction, check out the [Documentation](docs/).
-
-## Contributing
-Contributions to improve Agent for Prediction are welcome. Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to make contributions.
+## Acknowledgement
+Thanks to NVIDIA & Langchain's competition! Both NVIDIA NIM API and LangGraph are used in the project smoothly. 
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
