@@ -35,8 +35,8 @@ class CodeWriter:
     def debug(self, code: str, error: str) -> CodeOut:
         usr_prompt = f"Code:\n{code}\n\nError Description:\n{error}\n"
         sys_prompt = '''
-        You are a coding assistant with expertise in software engineering.
-        Debug the code and provide the corrected code, test cases, and an explanation.
+        You are a coding assistant with expertise in software engineering. You are very professional in debugging. You have received an error and you will reason carefully why the error happened and write a better code.
+        Debug the code and provide the corrected code, test cases, and a very strong and reasonable explanation. 
         '''
         code_out = self.response_generator.get_structured_response(sys_prompt, usr_prompt, self.CodeOut)  # Use structured response
         return code_out  # Return the CodeOut instance
