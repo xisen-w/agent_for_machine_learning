@@ -4,6 +4,7 @@ from langchain_core.pydantic_v1 import BaseModel, Field
 import io
 import contextlib
 import traceback
+from utils.response_generator import ResponseGenerator  # Add this import
 
 class CodeWriter:
     def __init__(self, model: str = "gpt-4o"):
