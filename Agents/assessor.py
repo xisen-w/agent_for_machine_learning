@@ -1,5 +1,7 @@
 from code_writer import CodeWriter  # Import the CodeWriter class
 import os
+import pandas as pd
+import io
 
 class Assessor:
     def __init__(self, model: str = "gpt-4o-mini"):
