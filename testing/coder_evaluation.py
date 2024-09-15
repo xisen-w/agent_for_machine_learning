@@ -4,6 +4,13 @@ import ast
 import contextlib
 import io
 import traceback
+import sys
+import os
+
+# Add the parent directory to the system path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from Agents.code_writer import CodeWriter
 
 # Function to execute code
 def execute_code(code: str) -> str:
@@ -36,7 +43,7 @@ def evaluate_test_list(code: str, test_list: list, test_setup_code: str = '') ->
 def load_sampled_tasks(sample_size=50): 
     """Loads the MBPP dataset and samples tasks."""
     ds = load_dataset("google-research-datasets/mbpp", "full")
-    df = pd.DataFrame(ds['evaluation'])
+    df = pd.DataFrame(ds['train'])
     sampled_df = df.sample(n=sample_size, random_state=42).reset_index(drop=True)
     print(sampled_df.head())  # Display sample for verification
     return sampled_df
@@ -48,14 +55,23 @@ def evaluate_tasks(sampled_df):
     code_writer = CodeWriter()
 
     results = []
-    for idx, row in sampled_df.iterrows():
+    for index, row in sampled_df.iterrows():
         task_id = row['task_id']
         prompt = row['text']
         ground_truth_code = row['code']
-        test_list = ast.literal_eval(row['test_list']) if row['test_list'] else []
+        # Check if test_list is a string that needs evaluation
+        if isinstance(row['test_list'], str):
+            try:
+                test_list = ast.literal_eval(row['test_list']) if row['test_list'] else []
+            except Exception as e:
+                print(f"Error evaluating test_list for task_id {task_id}: {e}")
+                test_list = []  # Fallback to an empty list on error
+        else:
+            test_list = row['test_list']  # Assume it's already a list
+
         test_setup_code = row['test_setup_code']
 
-        print(f"Evaluating Task {idx + 1}/{len(sampled_df)}: {prompt}")
+        print(f"Evaluating Task {index + 1}/{len(sampled_df)}: {prompt}")
 
         # Evaluate with write_code
         write_code_response = code_writer.write_code(prompt, ground_truth_code)
@@ -77,10 +93,13 @@ def evaluate_tasks(sampled_df):
             "test_list": test_list,
             "write_code_output": write_code_response.code,
             "write_code_correctness": write_code_correctness,
+            "write_code_comment": write_code_response.comment,
             "advanced_writing_output": advanced_writing_response.code,
             "advanced_writing_correctness": advanced_writing_correctness,
+            "advanced_writing_comment": advanced_writing_response.comment,
             "advanced_writing_v2_output": advanced_writing_v2_response.code,
-            "advanced_writing_v2_correctness": advanced_writing_v2_correctness
+            "advanced_writing_v2_correctness": advanced_writing_v2_correctness,
+            "advanced_writing_v2_comment": advanced_writing_v2_response.comment
         })
 
         print(f"Task {task_id} evaluation complete.\n")
@@ -102,3 +121,5 @@ if __name__ == "__main__":
 
     # Save the evaluation results
     save_results_to_csv(evaluation_results)
+
+    # 
