@@ -6,6 +6,9 @@ import io
 import traceback
 import sys
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
 
 # Add the parent directory to the system path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -28,12 +31,12 @@ def evaluate_test_list(code: str, test_list: list, test_setup_code: str = '') ->
     """Evaluates the generated code by running the provided test cases."""
     try:
         if test_setup_code:
-            exec(test_setup_code)
+            CodeWriter.execute_code(test_setup_code)
 
-        exec(code)  # Execute the generated code
+        CodeWriter.execute_code(code)  # Execute the generated code
 
         for test in test_list:  # Run each test
-            exec(test)
+            CodeWriter.execute_code(test)
 
         return "Correct"  # If all tests pass
     except Exception as e:
@@ -122,4 +125,38 @@ if __name__ == "__main__":
     # Save the evaluation results
     save_results_to_csv(evaluation_results)
 
-    # 
+    # Summary of result comparison
+    write_code_correct = sum(1 for result in evaluation_results if result['write_code_correctness'] == "Correct")
+    advanced_writing_correct = sum(1 for result in evaluation_results if result['advanced_writing_correctness'] == "Correct")
+    advanced_writing_v2_correct = sum(1 for result in evaluation_results if result['advanced_writing_v2_correctness'] == "Correct")
+
+    total_tasks = len(evaluation_results)
+
+    print(f"Summary of Results:")
+    print(f"Write Code Correctness: {write_code_correct}/{total_tasks} ({(write_code_correct / total_tasks) * 100:.2f}%)")
+    print(f"Advanced Writing Correctness: {advanced_writing_correct}/{total_tasks} ({(advanced_writing_correct / total_tasks) * 100:.2f}%)")
+    print(f"Advanced Writing V2 Correctness: {advanced_writing_v2_correct}/{total_tasks} ({(advanced_writing_v2_correct / total_tasks) * 100:.2f}%)")
+
+    # Deeper numerical analysis
+    correctness_rates = [
+        write_code_correct / total_tasks,
+        advanced_writing_correct / total_tasks,
+        advanced_writing_v2_correct / total_tasks
+    ]
+    
+    # Statistical analysis (e.g., t-test)
+    t_stat, p_value = stats.ttest_ind(
+        [1 if result['write_code_correctness'] == "Correct" else 0 for result in evaluation_results],
+        [1 if result['advanced_writing_correctness'] == "Correct" else 0 for result in evaluation_results]
+    )
+    print(f"T-test between Write Code and Advanced Writing: t-statistic = {t_stat}, p-value = {p_value}")
+
+    # Visualization
+    methods = ['Write Code', 'Advanced Writing', 'Advanced Writing V2']
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x=methods, y=correctness_rates)
+    plt.ylabel('Correctness Rate')
+    plt.title('Correctness Rate Comparison of Different Methods')
+    plt.ylim(0, 1)
+    plt.axhline(y=0.5, color='r', linestyle='--')  # Reference line at 50%
+    plt.show()
