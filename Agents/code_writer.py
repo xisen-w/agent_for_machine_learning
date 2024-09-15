@@ -1,56 +1,43 @@
-from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.pydantic_v1 import BaseModel, Field
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import io
 import contextlib
 import traceback
-from utils.response_generator import ResponseGenerator  # Add this import
+from pydantic import BaseModel, Field
+from utils.response_generator import ResponseGenerator  # Ensure this import is correct
+
+# Add the parent directory to the system path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 class CodeWriter:
-    def __init__(self, model: str = "gpt-4o"):
+    def __init__(self, model: str = "gpt-4o-mini"):
         self.model = model
+        self.response_generator = ResponseGenerator(model=self.model)  # Initialize ResponseGenerator
 
     class CodeOut(BaseModel):
         code: str = Field(description="The generated code")
         test: str = Field(description="Test cases for the generated code")
         comment: str = Field(description="Explanation of the generated code")
 
-    def write_code(self, demand: str, knowledge_base: str) -> dict:
+    def write_code(self, demand: str, knowledge_base: str) -> CodeOut:
         sys_prompt = '''
         You are an advanced software engineer that writes useful and correct code.
         Given a specific demand and a knowledge base, generate code and a script to run it.
         Provide the code, test cases, and explanation for the code in JSON format.
         '''
         usr_prompt = f"Demand: {demand}\nKnowledge Base: {knowledge_base}\n"
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", "{system_prompt}"),
-            ("human", "{user_prompt}")
-        ])
-        llm = ChatOpenAI(temperature=0, model=self.model)
-        code_gen_chain = prompt | llm.with_structured_output(self.CodeOut)
-        ai_msg = code_gen_chain.invoke({
-            "system_prompt": sys_prompt,
-            "user_prompt": usr_prompt
-        })
-        return ai_msg.dict()
+        code_out = self.response_generator.get_structured_response(sys_prompt, usr_prompt, self.CodeOut)  # Use structured response
+        return code_out  # Return the CodeOut instance
 
-    def debug(self, code: str, error: str) -> dict:
+    def debug(self, code: str, error: str) -> CodeOut:
         usr_prompt = f"Code:\n{code}\n\nError Description:\n{error}\n"
         sys_prompt = '''
         You are a coding assistant with expertise in software engineering.
         Debug the code and provide the corrected code, test cases, and an explanation.
         '''
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", "{system_prompt}"),
-            ("human", "{user_prompt}")
-        ])
-        llm = ChatOpenAI(temperature=0, model=self.model)
-        debug_chain = prompt | llm.with_structured_output(self.CodeOut)
-        ai_msg = debug_chain.invoke({
-            "system_prompt": sys_prompt,
-            "user_prompt": usr_prompt
-        })
-        return ai_msg.dict()
+        code_out = self.response_generator.get_structured_response(sys_prompt, usr_prompt, self.CodeOut)  # Use structured response
+        return code_out  # Return the CodeOut instance
 
     @staticmethod
     def test_coder(code: str, test: str) -> str:
@@ -70,26 +57,73 @@ class CodeWriter:
             return traceback.format_exc()
         return output.getvalue().strip()
 
-    def advanced_writing(self, demand: str, knowledge_base: str) -> dict:
+    def advanced_writing(self, demand: str, knowledge_base: str) -> CodeOut:
         code_out = self.write_code(demand, knowledge_base)
-        code, test, comment = code_out['code'], code_out['test'], code_out['comment']
-        state = self.test_coder(code, test)
+        state = self.test_coder(code_out.code, code_out.test)
         if state == "True":
-            return code, test, comment
-        return self.debug(code, state)
+            return code_out
+        return self.debug(code_out.code, state)
 
-    def advanced_writing_v2(self, demand: str, knowledge_base: str, max_iter: int = 6) -> dict:
+    def advanced_writing_v2(self, demand: str, knowledge_base: str, max_iter: int = 6) -> CodeOut:
         context = ""
         code_out = self.write_code(demand, knowledge_base)
-        code, test, comment = code_out['code'], code_out['test'], code_out['comment']
+        code, test, comment = code_out.code, code_out.test, code_out.comment
         i = 0
         state = self.test_coder(code, test)
 
+        print(f"Initial Code:\n{code}\n")
+        print(f"Initial Test Cases:\n{test}\n")
+
         while state != "True" and i < max_iter:
+            print(f"Iteration {i + 1}:")
+            print(f"Error Notice: {state}")
+            print(f"Previous Code Explanation: {comment}\n")
+            
             context += f"Iteration {i}: Error Notice: {state}. Previous code explanation: {comment}\n"
             debug_output = self.debug(f"{code}\n{test}", context)
-            code, test, comment = debug_output['corrected_code'], debug_output['test'], debug_output['explanation']
+            code, test, comment = debug_output.code, debug_output.test, debug_output.comment
             i += 1
             state = self.test_coder(code, test)
 
-        return {"code": code, "test": test, "comment": comment}
+            print(f"Updated Code:\n{code}\n")
+            print(f"Updated Test Cases:\n{test}\n")
+
+        print(f"Final Code after {i} iterations:\n{code}\n")
+        print(f"Final Test Cases:\n{test}\n")
+        print(f"Final Comment:\n{comment}\n")
+
+        return self.CodeOut(code=code, test=test, comment=comment)
+
+if __name__ == "__main__":
+    # Test the CodeWriter class
+    cw = CodeWriter()
+
+    # Test write_code method
+    demand = "Write a function to calculate the factorial of a number."
+    knowledge_base = "The function should handle both positive and negative integers."
+    print("Testing write_code:")
+    response = cw.write_code(demand, knowledge_base)
+    print(response)
+
+    # Test debug method
+    code_with_error = "def factorial(n): return n * factorial(n - 1)"  # Missing base case
+    error_description = "RecursionError: maximum recursion depth exceeded"
+    print("\nTesting debug:")
+    debug_response = cw.debug(code_with_error, error_description)
+    print(debug_response)
+
+    # Test advanced_writing method
+    print("\nTesting advanced_writing:")
+    advanced_demand = "Create a Python function to reverse a string."
+    advanced_knowledge_base = "The function should handle empty strings and single-character strings."
+    advanced_response = cw.advanced_writing(advanced_demand, advanced_knowledge_base)
+    print(advanced_response)
+
+    # Test advanced_writing_v2 method
+    print("\nTesting advanced_writing_v2:")
+    advanced_v2_demand = "Write a function to sort a list of integers."
+    advanced_v2_knowledge_base = "The function should sort the list in ascending order."
+    advanced_v2_response = cw.advanced_writing_v2(advanced_v2_demand, advanced_v2_knowledge_base)
+    print(advanced_v2_response)
+
+    # You can add more tests for other methods as needed

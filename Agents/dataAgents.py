@@ -1,4 +1,4 @@
-from code_writer import CodeWriter  # Import the CodeWriter class
+from Agents.code_writer import CodeWriter  # Corrected import path
 from utils.response_generator import ResponseGenerator  # Add this import
 import pandas as pd
 import io
@@ -76,5 +76,4 @@ class DataAgents:
         knowledge_base = f"Basic Python syntax and unit testing using the dataset from {data_path}."
 
         return self.code_writer.write_code(demand, knowledge_base) 
-    
-    
+
