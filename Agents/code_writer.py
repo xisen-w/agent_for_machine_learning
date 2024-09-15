@@ -6,6 +6,8 @@ import contextlib
 import traceback
 from pydantic import BaseModel, Field
 from utils.response_generator import ResponseGenerator  # Ensure this import is correct
+import subprocess
+import tempfile
 
 # Add the parent directory to the system path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -43,19 +45,41 @@ class CodeWriter:
     def test_coder(code: str, test: str) -> str:
         combined_code = f"{code}\n{test}"
         result = CodeWriter.execute_code(combined_code)
-        if result.startswith("Traceback"):
+        if result.startswith("Errors:"):
             return result
         return "True"
 
     @staticmethod
     def execute_code(code: str) -> str:
-        output = io.StringIO()
+        """
+        Executes the provided code by writing it to a temporary file and running it.
+
+        Parameters:
+            code (str): The code to execute.
+
+        Returns:
+            str: The output of the executed code or an error message.
+        """
+        # Create a temporary file
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.py') as temp_file:
+            temp_file.write(code.encode('utf-8'))  # Write the code to the file
+            temp_file_path = temp_file.name  # Get the file path
+
         try:
-            with contextlib.redirect_stdout(output):
-                exec(code)
+            # Execute the file
+            result = subprocess.run(['python', temp_file_path], capture_output=True, text=True)
+            output = result.stdout
+            errors = result.stderr
+
+            if errors:
+                return f"Errors:\n{errors}"
+            return output
         except Exception as e:
-            return traceback.format_exc()
-        return output.getvalue().strip()
+            return f"An error occurred while executing the file: {str(e)}"
+        finally:
+            # Clean up the temporary file
+            if os.path.exists(temp_file_path):
+                os.remove(temp_file_path)
 
     def advanced_writing(self, demand: str, knowledge_base: str) -> CodeOut:
         code_out = self.write_code(demand, knowledge_base)
@@ -73,6 +97,7 @@ class CodeWriter:
 
         print(f"Initial Code:\n{code}\n")
         print(f"Initial Test Cases:\n{test}\n")
+        final_output = "INITIATION"
 
         while state != "True" and i < max_iter:
             print(f"Iteration {i + 1}:")
@@ -84,12 +109,14 @@ class CodeWriter:
             code, test, comment = debug_output.code, debug_output.test, debug_output.comment
             i += 1
             state = self.test_coder(code, test)
+            final_output = self.execute_code(f"{code}\n{test}")
 
             print(f"Updated Code:\n{code}\n")
             print(f"Updated Test Cases:\n{test}\n")
 
         print(f"Final Code after {i} iterations:\n{code}\n")
         print(f"Final Test Cases:\n{test}\n")
+        print(f"Final Output:\n{final_output}")
         print(f"Final Comment:\n{comment}\n")
 
         return self.CodeOut(code=code, test=test, comment=comment)
