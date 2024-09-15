@@ -22,3 +22,18 @@ class A4MLFramework:
         # ... existing code removed ...
         
         return model_design  # Return the model design instead of the full report
+    
+    def main():
+        # Sample usage
+        parent_path = 'agent_for_prediction/datasets'
+        file_name = 'social-media.csv'
+        user_demand = 'Analyze social media trends and generate insights.'
+
+        framework = A4MLFramework()
+        model_design = framework.a4ml(parent_path, file_name, user_demand)
+
+        print("Model Design:")
+        print(model_design)
+
+    if __name__ == "__main__":
+        main()
